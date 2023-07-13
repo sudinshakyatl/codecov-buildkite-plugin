@@ -71,17 +71,8 @@ get_codecov_uploader() {
     apk add gnupg
   fi
 
-  # One-time step
-  if [[ "${BUILDKITE_PLUGIN_CODECOV_PGP_PUBLIC_KEY_URL-"false"}" = "" ]]; then
-    debug "Importing bundled Codecov's PGP public key : $(pwd)/pgp_keys.asc" 
-    curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-    curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-    curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
-    curl -Os https://uploader.codecov.io/latest/linux/codecov
-  fi
-
   local file
-  for file in codecov codecov.SHA256SUM codecov.SHA256SUM.sig
+  for file in codecov
   do
     local local_path="${TMP_DIR}/${file}"
     if [[ ! -e "${local_path}" ]]; then
@@ -98,12 +89,6 @@ get_codecov_uploader() {
 
   (
     pushd "${TMP_DIR}" >/dev/null
-    gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
-    if [[ "${OS}" = "macos" ]]; then
-      shasum -a 256 -c codecov.SHA256SUM
-    else
-      sha256sum -c codecov.SHA256SUM
-    fi
     chmod +x codecov
     popd >/dev/null
   )
