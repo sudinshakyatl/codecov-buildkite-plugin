@@ -92,7 +92,6 @@ get_codecov_uploader() {
 
   (
     pushd "${TMP_DIR}" >/dev/null
-    gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
     if [[ "${OS}" = "macos" ]]; then
       shasum -a 256 -c codecov.SHA256SUM
     else
