@@ -6,6 +6,7 @@ requirements:
   - docker
   - gpg
   - curl
+  - gnupg
 configuration:
   properties:
     args:
