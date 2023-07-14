@@ -69,6 +69,8 @@ get_codecov_uploader() {
 
   if [[ "${OS}" = "alpine" ]]; then
     apk add gnupg
+  else
+    yum install gnupg -y
   fi
 
   # One-time step
